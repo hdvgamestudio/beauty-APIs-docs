@@ -1,3 +1,5 @@
 #!/bin/bash
-clear
-echo "Good morning, world."
+
+unzip ~/Downloads/nodejs-server-generated.zip -d  ~/Download
+
+
