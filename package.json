@@ -1,0 +1,15 @@
+{
+  "name": "",
+  "version": "1.0.9-abcd",
+  "description": "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification",
+  "main": "index.js",
+  "keywords": [
+    "swagger"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.2.0",
+    "swagger-tools": "0.8.*"
+  }
+}
