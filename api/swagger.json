@@ -1,191 +1,783 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "title": "beauty-APIs",
-    "description": "APIs for products related to cosmetic",
-    "version": "1.0.0"
-  },
-  "produces": ["application/json"],
-  "host": "localhost:8080",
-  "basePath": "/api/v1",
-  "paths": {
-  
-  "/users": {
-  	
-    "get": {
-      "summary": "Get list of all users",
-      "description":"",
-      "x-swagger-router-controller": "User",
-      "tags": ["User"],
-      "operationId": "usersGet",
-      "parameters": [
-        {
-  "name" : "x-access-token",
-  "in" : "header",
-  "description" : "Need sending a access token to authenticate the request",
-  "required" : true,
-  "type" : "string"
-}
-        
-      ],
-      "responses": {
-        "200": {
-  "description" : "OK",
-  "schema" : {
-    "type" : "array",
-    "items" : {
-      "$ref" : "#/definitions/User"
+    "swagger": "2.0",
+    "info": {
+        "title": "beauty-APIs",
+        "description": "APIs for products related to cosmetic",
+        "version": "1.0.0"
+    },
+    "produces": [
+        "application/json"
+    ],
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/users": {
+            "get": {
+                "summary": "Get list of all users",
+                "description": "",
+                "x-swagger-router-controller": "User",
+                "tags": [
+                    "User"
+                ],
+                "operationId": "usersGet",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "Need sending a access token to authenticate the request",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request due to invalid data",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create or signup a new user by a local account or a facebook , twitter, google account.",
+                "description": "",
+                "x-swagger-router-controller": "User",
+                "tags": [
+                    "User"
+                ],
+                "operationId": "usersPost",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "user",
+                        "description": "An internal user JSON",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "access_token": {
+                                    "type": "string"
+                                },
+                                "user_id": {
+                                    "type": "string"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": true
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request due to invalid data",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tags": {
+            "get": {
+                "description": "Gets `Tag` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+                "x-swagger-router-controller": "Tag",
+                "tags": [
+                    "Tag"
+                ],
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "point start of array",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "size of array",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "title": "Tags",
+                            "type": "array",
+                            "items": {
+                                "title": "Tag",
+                                "$ref": "#/definitions/Tag"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server error",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creat 'Tag' object\n",
+                "tags": [
+                    "Tag"
+                ],
+                "parameters": [
+                    {
+                        "name": "tag",
+                        "in": "body",
+                        "description": "tag",
+                        "schema": {
+                            "title": "Tag",
+                            "$ref": "#/definitions/Tag"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "schema": {
+                            "title": "tag",
+                            "$ref": "#/definitions/Tag"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server error",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/shops": {
+            "get": {
+                "description": "search and filter `shop`\n",
+                "tags": [
+                    "Shop"
+                ],
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "index of shops start",
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "capacity list shops",
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "search shops",
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "filter name",
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "address",
+                        "in": "query",
+                        "description": "filter address",
+                        "type": "string",
+                        "format": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response successful",
+                        "schema": {
+                            "title": "Shops",
+                            "type": "array",
+                            "items": {
+                                "title": "Shop",
+                                "$ref": "#/definitions/Shop"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server error",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a shop\n",
+                "tags": [
+                    "Shop"
+                ],
+                "parameters": [
+                    {
+                        "name": "shop",
+                        "in": "body",
+                        "description": "new shop",
+                        "schema": {
+                            "title": "shop",
+                            "$ref": "#/definitions/Shop"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response successful",
+                        "schema": {
+                            "title": "Shop",
+                            "$ref": "#/definitions/Shop"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/shops/{id}": {
+            "put": {
+                "description": "edit shop",
+                "tags": [
+                    "Shop"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "ID of shop that needs to be updated",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "shop",
+                        "description": "Updated name of the shop",
+                        "required": true,
+                        "schema": {
+                            "title": "Shop",
+                            "$ref": "#/definitions/Shop"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "title": "Shop",
+                            "$ref": "#/definitions/Shop"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server error",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete shop",
+                "tags": [
+                    "Shop"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id of shop that needs to be delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server error",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/distributors": {
+            "get": {
+                "description": "search and filter `Distributor`\n",
+                "tags": [
+                    "Distributor"
+                ],
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "index of distributor start",
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "capacity list distributor",
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "search distributor",
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "filter name",
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "address",
+                        "in": "query",
+                        "description": "filter address",
+                        "type": "string",
+                        "format": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response successful",
+                        "schema": {
+                            "title": "Distributors",
+                            "type": "array",
+                            "items": {
+                                "title": "distributors",
+                                "$ref": "#/definitions/Distributor"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server error",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a shop\n",
+                "tags": [
+                    "Distributor"
+                ],
+                "parameters": [
+                    {
+                        "name": "distributor",
+                        "in": "body",
+                        "description": "new distributor",
+                        "schema": {
+                            "title": "shop",
+                            "$ref": "#/definitions/Distributor"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response successful",
+                        "schema": {
+                            "title": "Distributor",
+                            "$ref": "#/definitions/Distributor"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server error",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/distributors/{id}": {
+            "put": {
+                "description": "edit Distributor",
+                "tags": [
+                    "Distributor"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "ID of shop that needs to be updated",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "distributor",
+                        "description": "Updated name of the shop",
+                        "required": true,
+                        "schema": {
+                            "title": "distributor",
+                            "$ref": "#/definitions/Distributor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "schema": {
+                            "title": "distributor",
+                            "$ref": "#/definitions/Distributor"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server error",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete distributor",
+                "tags": [
+                    "Distributor"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id of shop that needs to be delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server error",
+                        "schema": {
+                            "title": "Error",
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "required": [
+                "account_type"
+            ],
+            "properties": {
+                "account_type": {
+                    "type": "string",
+                    "enum": [
+                        "internal",
+                        "facebook",
+                        "twitter",
+                        "google"
+                    ]
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "genre": {
+                    "type": "string",
+                    "enum": [
+                        "notgiven",
+                        "male",
+                        "female"
+                    ]
+                },
+                "birthday": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "avatar_url": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                }
+            }
+        },
+        "Tag": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date"
+                }
+            }
+        },
+        "Shop": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "address": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "phone": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "GPS": {
+                    "type": "object",
+                    "properties": {
+                        "longitude": {
+                            "type": "number",
+                            "format": "double"
+                        },
+                        "latiude": {
+                            "type": "number",
+                            "format": "double"
+                        }
+                    }
+                }
+            }
+        },
+        "Distributor": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "modified_at": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "information": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "website": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "phone": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "logo_url": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "shops": {
+                    "title": "shops",
+                    "$ref": "#/definitions/Shop"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string",
+                    "format": "string"
+                }
+            }
+        }
     }
-  }
-}
-        ,
-        "400": {
-  "description" : "Bad request due to invalid data",
-  "schema" : {
-    "type" : "object",
-    "properties" : {
-      "code" : {
-        "type" : "string"
-      },
-      "message" : {
-        "type" : "string"
-      }
-    }
-  }
-}
-        ,
-        "500": {
-  "description" : "Internal server error",
-  "schema" : {
-    "type" : "object",
-    "properties" : {
-      "code" : {
-        "type" : "string"
-      },
-      "message" : {
-        "type" : "string"
-      }
-    }
-  }
-}
-        
-        
-      }
-    } ,
-    
-    "post": {
-      "summary": "Create or signup a new user by a local account or a facebook , twitter, google account.",
-      "description":"",
-      "x-swagger-router-controller": "User",
-      "tags": ["User"],
-      "operationId": "usersPost",
-      "parameters": [
-        {
-  "in" : "body",
-  "name" : "user",
-  "description" : "An internal user JSON",
-  "required" : false,
-  "schema" : {
-    "$ref" : "#/definitions/User"
-  }
-}
-        
-      ],
-      "responses": {
-        "200": {
-  "description" : "Ok",
-  "schema" : {
-    "type" : "object",
-    "properties" : {
-      "access_token" : {
-        "type" : "string"
-      },
-      "user_id" : {
-        "type" : "string"
-      },
-      "success" : {
-        "type" : "boolean",
-        "default" : true
-      }
-    }
-  }
-}
-        ,
-        "400": {
-  "description" : "Bad request due to invalid data",
-  "schema" : {
-    "type" : "object",
-    "properties" : {
-      "code" : {
-        "type" : "string"
-      },
-      "message" : {
-        "type" : "string"
-      }
-    }
-  }
-}
-        ,
-        "500": {
-  "description" : "Internal server error",
-  "schema" : {
-    "type" : "object",
-    "properties" : {
-      "code" : {
-        "type" : "string"
-      },
-      "message" : {
-        "type" : "string"
-      }
-    }
-  }
-}
-        
-        
-      }
-    } 
-    
-  } 
-  
-   
-  }, "definitions": {
-  "User": {
-  "required" : [ "account_type" ],
-  "properties" : {
-    "account_type" : {
-      "type" : "string",
-      "enum" : [ "internal", "facebook", "twitter", "google" ]
-    },
-    "name" : {
-      "type" : "string"
-    },
-    "password" : {
-      "type" : "string"
-    },
-    "uuid" : {
-      "type" : "string"
-    },
-    "email" : {
-      "type" : "string"
-    },
-    "genre" : {
-      "type" : "string",
-      "enum" : [ "notgiven", "male", "female" ]
-    },
-    "birthday" : {
-      "type" : "string",
-      "format" : "date-time"
-    },
-    "phone_number" : {
-      "type" : "string"
-    },
-    "avatar_url" : {
-      "type" : "string"
-    },
-    "address" : {
-      "type" : "string"
-    }
-  }
-}
-  }
 }
